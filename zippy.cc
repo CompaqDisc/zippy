@@ -36,7 +36,9 @@ int main(int argc, char** argv) {
 	*/
 
 	std::cout << "Zippy, a Z80 Emulator" << std::endl
-		<< "Copyright (c) 2019, Bradan J. Wolbeck" << std::endl << std::endl;
+		<< "Copyright (c) 2019, "
+		<< "Bradan J. Wolbeck (CompaqDisc) <bwolbeck@compaqdisc.com>"
+		<< std::endl << std::endl;
 
 	Machine machine_ = Machine();
 	machine_.Start();
