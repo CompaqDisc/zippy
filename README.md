@@ -2,7 +2,6 @@
 Zippy aims to be a cycle-accurate emulator based off of the Zilog Z80 microprocessor.
 
 ## Project Status
-Basic emulation is not fully implemented! This will not run anything currently!
 Currently implementing M-Cycles and T-States.
 
 ## Goals
@@ -12,4 +11,4 @@ Currently implementing M-Cycles and T-States.
 * Modularity
 
 ## Todo List
-* [ ] Basic emulation capability (LD, ADD, SUB, JP).
+* [ ] Basic emulation capability (LD, ADD, SUB, JP, etc.).
