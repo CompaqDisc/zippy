@@ -4,16 +4,14 @@
 #include <string>
 #include <atomic>
 #include <vector>
-#include "../chip/z80.h"
-#include "../peripheral/peripheral.h"
+#include "../bus/bus.h"
 
 class Machine {
 protected:
-	long lTargetClockSpeedHz;
-	std::string sMachineID;
-	static std::atomic<bool> bAtomActive;
-	Z80 cpu;
-	std::vector<Peripheral> pv;
+	long target_speed_hz_;
+	std::string machine_id_;
+	static std::atomic<bool> atomic_active_;
+	Bus bus_;
 
 private:
 	void TaskThread();
@@ -23,4 +21,4 @@ public:
 	void Start();
 };
 
-#endif
+#endif	// ZIPPY_MACHINE_H_

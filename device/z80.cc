@@ -1,42 +1,38 @@
 #include <iostream>
+#include <stdint.h>
 #include "z80.h"
 
-Z80::Z80() {
-	this->reset();
+Z80::Z80() {}
+
+void Z80::BindToBus(Bus* bus) {
+	bus_ = bus;
 }
 
-void Z80::reset() {
-	pc = 0x0000;
-	im = 0;
-	ie = true;
-	i = 0x00;
-	r = 0x00;
-	_halt = false;
-	_wait = false;
-	m_cycle = 1;
-	t_state = 1;
-	std::cout << "[INFO] [z80.cc] Reset" << std::endl;
-}
+void Z80::Reset() {
+	pc_ = 0x0000;
+	i_ = 0x00;
+	r_ = 0x00;
 
-const bool Z80::halt() {
-	return _halt;
+	interrupts_enabled_ = false;
+	interrupt_mode_ = 0;
+
+	machine_cycle_ = 1;
+	t_state_ = 1;
+
+	std::cout << "[INFO] [z80.cc] Reset Complete" << std::endl;
 }
 
 /*
 	Single-cycle step of the processor.
 */
-void Z80::clock() {
+void Z80::Clock() {
 	std::cout << "[INFO] [z80.cc] Clock" << std::endl;
-	static uint8_t instruction;
-	static uint8_t prefix;
-	static uint8_t data1;
-	static uint8_t data2;
 
-	switch (m_cycle) {
+	switch (machine_cycle_) {
 	case 1:
 		// M1 - Opcode Fetch
 		std::cout << "[INFO] [z80.cc] M1" << std::endl;
-		switch (t_state) {
+		switch (t_state_) {
 		case 1:
 			/*
 				T1 of opcode fetch.
@@ -51,16 +47,16 @@ void Z80::clock() {
 
 			std::cout << "[INFO] [z80.cc] T1" << std::endl;
 			// /M1 goes active.
-			_m1 = true;
+			bus_->PushM1(true);
 			// The program counter is placed on the address bus.
-			_address = pc;
+			bus_->PushAddress(pc_);
 			// /MREQ goes active.
-			_mreq = true;
+			bus_->PushMemoryRequest(true);
 			// /RD also goes active.
-			_rd = true;
+			bus_->PushReadRequest(true);
 
 			// Advance to next t-state.
-			t_state = 2;
+			t_state_ = 2;
 			break;
 		case 2:
 			/*
@@ -71,9 +67,9 @@ void Z80::clock() {
 			*/
 
 			std::cout << "[INFO] [z80.cc] T2" << std::endl;
-			if (!_wait) {
+			if (!bus_->WaitActive()) {
 				// If not waiting, advance to next t-state.
-				t_state = 3;
+				t_state_ = 3;
 			} else {
 				std::cout << "[INFO] [z80.cc] /WAIT Active" << std::endl;
 			}
@@ -88,7 +84,9 @@ void Z80::clock() {
 				|*	This same edge is used by the CPU to turn off the
 				|	/RD and /MREQ signals.
 			*/
-
+			data_ = bus_->Data();
+			bus_->PushReadRequest(false);
+			bus_->PushMemoryRequest(false);
 			std::cout << "[INFO] [z80.cc] T3" << std::endl;
 			break;
 		}

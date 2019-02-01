@@ -26,7 +26,6 @@
 #include <iostream>
 #include <string>
 #include "machine/machine.h"
-#include "machine/rc2014.h"
 
 int main(int argc, char** argv) {
 	/*
@@ -39,8 +38,8 @@ int main(int argc, char** argv) {
 	std::cout << "Zippy, a Z80 Emulator" << std::endl
 		<< "Copyright (c) 2019, Bradan J. Wolbeck" << std::endl << std::endl;
 
-	Machine machine = Machine();
-	machine.Start();
+	Machine machine_ = Machine();
+	machine_.Start();
 
 	return 0;
 }
