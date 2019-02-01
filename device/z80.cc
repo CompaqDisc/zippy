@@ -80,10 +80,11 @@ void Z80::Clock() {
 				|*	This same edge is used by the CPU to turn off the
 				|	/RD and /MREQ signals.
 			*/
+
+			std::cout << "[INFO] [z80.cc] T3" << std::endl;
 			data_ = bus_->Data();
 			bus_->PushReadRequest(false);
 			bus_->PushMemoryRequest(false);
-			std::cout << "[INFO] [z80.cc] T3" << std::endl;
 			break;
 		}
 	}
