@@ -5,8 +5,7 @@
 
 class Z80 {
 public:
-	bool halted;
-
+	const bool halt();
 	void reset();
 	void clock();
 	Z80();
@@ -44,6 +43,10 @@ private:
 			Status register
 					SZ-H-PNC	Flags 
 	*/
+
+	/*
+		Internal registers.
+	*/
 	reg16 af;
 	reg16 bc;
 	reg16 de;
@@ -63,20 +66,56 @@ private:
 
 	uint16_t pc;
 
+	/*
+		Internal states/signals
+	*/
+	// Interrupts enabled?
 	bool ie;
-	bool m1;
-	bool rd;
-	bool wr;
-	bool mreq;
-	bool rfsh;
-	bool wait;
-
+	// Interrupt mode
 	uint8_t im;
+	// Current M-Cycle
 	uint8_t m_cycle;
+	// Current T_State
 	uint8_t t_state;
 
-	uint16_t address;
-	uint8_t data;
+	/*
+		Exposed I/O Lines
+		(Going from pin 1 to pin 40, roughly.)
+	*/
+	// Address bus, output.
+	uint16_t _address;
+	// Data bus.
+	uint8_t _data;
+	
+	/*
+		Name: /INT,
+		Pin#: 16,
+		Direction: Input,
+		Description: Interrupt
+	*/
+	bool _int;
+	// Non-Maskable Interrupt, input.
+	bool _nmi;
+	// Halt, output.
+	bool _halt;
+	// Memory Request, output.
+	bool _mreq;
+	// I/O Request, output.
+	bool _iorq;
+	// Read line, output.
+	bool _rd;
+	// Write line, output.
+	bool _wr;
+	// Bus Acknowledge
+	bool _busack;
+	// Wait, input.
+	bool _wait;
+	// Bus Request, input.
+	bool _busrq;
+	// M1, output.
+	bool _m1;
+	// Refresh, output.
+	bool _rfsh;
 };
 
 #endif

@@ -11,11 +11,15 @@ void Z80::reset() {
 	ie = true;
 	i = 0x00;
 	r = 0x00;
-	halted = false;
-	wait = false;
+	_halt = false;
+	_wait = false;
 	m_cycle = 1;
 	t_state = 1;
 	std::cout << "[INFO] [z80.cc] Reset" << std::endl;
+}
+
+const bool Z80::halt() {
+	return _halt;
 }
 
 /*
@@ -46,13 +50,13 @@ void Z80::clock() {
 			*/
 			
 			// /M1 goes active.
-			m1 = true;
+			_m1 = true;
 			// The program counter is placed on the address bus.
-			address = pc;
+			_address = pc;
 			// /MREQ goes active.
-			mreq = true;
+			_mreq = true;
 			// /RD also goes active.
-			rd = true;
+			_rd = true;
 
 			// Advance to next t-state.
 			t_state = 2;
@@ -65,7 +69,7 @@ void Z80::clock() {
 				|*	/WAIT is sampled. Repeat T2 while active.
 			*/
 
-			if (!wait) {
+			if (!_wait) {
 				// If not waiting, advance to next t-state.
 				t_state = 3;
 			}

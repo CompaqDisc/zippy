@@ -38,7 +38,7 @@ void Machine::TaskThread() {
 				fAccumulatedTime = 0.0f;
 			}
 			
-			if (cpu.halted) {
+			if (cpu.halt()) {
 				bAtomActive = false;
 			}
 		}
