@@ -1,2 +1,5 @@
 .vscode/
 zippy
+test.rom
+asm/test.rom
+asm/test.lst

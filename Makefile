@@ -12,3 +12,4 @@ all: test.rom
 
 test.rom:
 	cd asm && zasm test.asm
+	cp asm/test.rom .
