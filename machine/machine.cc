@@ -24,23 +24,20 @@ void Machine::TaskThread() {
 	auto tp2 = std::chrono::system_clock::now();
 
 	while (bAtomActive) {
-		// Magic inner loop?
-		while (bAtomActive) {
-			tp2 = std::chrono::system_clock::now();
-			std::chrono::duration<float> elapsedTime = tp2 - tp1;
-			tp1 = tp2;
-			float fElapsedTime = elapsedTime.count();
-			static float fAccumulatedTime;
-			fAccumulatedTime += fElapsedTime;
+		tp2 = std::chrono::system_clock::now();
+		std::chrono::duration<float> elapsedTime = tp2 - tp1;
+		tp1 = tp2;
+		float fElapsedTime = elapsedTime.count();
+		static float fAccumulatedTime;
+		fAccumulatedTime += fElapsedTime;
 
-			if (fAccumulatedTime >= 1.0f / this->lTargetClockSpeedHz) {
-				cpu.clock();
-				fAccumulatedTime = 0.0f;
-			}
-			
-			if (cpu.halt()) {
-				bAtomActive = false;
-			}
+		if (fAccumulatedTime >= 1.0f / this->lTargetClockSpeedHz) {
+			cpu.clock();
+			fAccumulatedTime = 0.0f;
+		}
+		
+		if (cpu.halt()) {
+			bAtomActive = false;
 		}
 	}
 }

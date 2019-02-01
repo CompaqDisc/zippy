@@ -48,7 +48,8 @@ void Z80::clock() {
 				|*	The /MREQ signal goes active.
 				|*	The /RD line also goes active.
 			*/
-			
+
+			std::cout << "[INFO] [z80.cc] T1" << std::endl;
 			// /M1 goes active.
 			_m1 = true;
 			// The program counter is placed on the address bus.
@@ -69,9 +70,12 @@ void Z80::clock() {
 				|*	/WAIT is sampled. Repeat T2 while active.
 			*/
 
+			std::cout << "[INFO] [z80.cc] T2" << std::endl;
 			if (!_wait) {
 				// If not waiting, advance to next t-state.
 				t_state = 3;
+			} else {
+				std::cout << "[INFO] [z80.cc] /WAIT Active" << std::endl;
 			}
 			break;
 		case 3:
@@ -85,6 +89,7 @@ void Z80::clock() {
 				|	/RD and /MREQ signals.
 			*/
 
+			std::cout << "[INFO] [z80.cc] T3" << std::endl;
 			break;
 		}
 	}
