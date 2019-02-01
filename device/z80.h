@@ -46,7 +46,7 @@ private:
 	// Index Y
 	reg16 iy_;
 	// Stack Pointer
-	reg16 sp_;
+	uint16_t sp_;
 
 	// Interrupt Vector
 	uint8_t i_;

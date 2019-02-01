@@ -4,20 +4,16 @@
 
 Z80::Z80() {}
 
-void Z80::BindToBus(Bus* bus) {
-	bus_ = bus;
-}
-
 void Z80::Reset() {
-	pc_ = 0x0000;
-	i_ = 0x00;
-	r_ = 0x00;
+	pc_ = (uint16_t) 0x0000;
+	i_ = (uint8_t) 0x00;
+	r_ = (uint8_t) 0x00;
 
 	interrupts_enabled_ = false;
-	interrupt_mode_ = 0;
+	interrupt_mode_ = (uint8_t) 0;
 
-	machine_cycle_ = 1;
-	t_state_ = 1;
+	machine_cycle_ = (uint8_t) 1;
+	t_state_ = (uint8_t) 1;
 
 	std::cout << "[INFO] [z80.cc] Reset Complete" << std::endl;
 }
@@ -91,4 +87,8 @@ void Z80::Clock() {
 			break;
 		}
 	}
+}
+
+void Z80::BindToBus(Bus* bus) {
+	bus_ = bus;
 }

@@ -26,7 +26,7 @@ DeviceROM::DeviceROM(uint16_t address_start, size_t region_length,
 	// Bail if file wasn't found.
 	if (!f.good()) {
 		std::cout
-			<< "[FATL] [peripheral_rom.cc] Specified file does not exist!"
+			<< "[FATL] [device_rom.cc] Specified file does not exist!"
 			<< std::endl;
 		exit(ENOENT);
 	}
@@ -47,7 +47,8 @@ DeviceROM::DeviceROM(uint16_t address_start, size_t region_length,
 		
 		// Warn how large the file was.
 		printf(
-			"[WARN] [device_rom.cc] %s: %libytes >= %libytes\n",
+			"[WARN] [device_rom.cc] "
+			"Attempting to load %s (%li bytes), into region of %li bytes!\n",
 			file_path.c_str(), file_length, region_length_
 		);
 
@@ -55,7 +56,8 @@ DeviceROM::DeviceROM(uint16_t address_start, size_t region_length,
 		file_length = sizeof(buffer_contents_);
 	} else {
 		printf(
-			"[INFO] [device_rom.cc] %s: %libytes !> %libytes\n",
+			"[INFO] [device_rom.cc] "
+			"Loaded %s (%li bytes), into region of %li bytes\n",
 			file_path.c_str(), file_length, region_length_
 		);
 	}
