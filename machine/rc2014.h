@@ -6,7 +6,9 @@
 class RC2014: public Machine {
 public:
 	RC2014();
-	~RC2014();
+
+	void Start();
+	void TaskThread();
 };
 
 #endif

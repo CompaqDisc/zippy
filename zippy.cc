@@ -23,25 +23,38 @@
 	IN THE SOFTWARE.
 */
 
+#include "machine/machine.h"
+#include "machine/rc2014.h"
+
 #include <iostream>
 #include <string>
-#include "machine/machine.h"
+#include <vector>
 
 int main(int argc, char** argv) {
-	/*
-	Some basic flag testing, user must pass atleast these params:
-			-m, --machine   In-built machine type, or machine description file.
-				[default, rc2014]
-			-b, --blast	 Run at the full speed achievable by the host.
-	*/
+	std::vector<Machine*> machine_list;
+	machine_list.push_back(new Machine());
+	machine_list.push_back(new RC2014());
 
 	std::cout << "Zippy, a Z80 Emulator" << std::endl
 		<< "Copyright (c) 2019, "
 		<< "Bradan J. Wolbeck (CompaqDisc) <bwolbeck@compaqdisc.com>"
 		<< std::endl << std::endl;
 
-	Machine machine_ = Machine();
-	machine_.Start();
+	/*
+		Some basic flag testing, user must at least pass a machine type:
+			-m, --machine   In-built machine type, or machine description file.
+				[default, rc2014]
+	*/
+	/*if (argc < 3) {
+		// Not enough parameters!
+		std::cout
+			<< "[FATL] [zippy.cc] Not enough arguments to continue! "
+			<< "Please pass '-m [machine_id]'" << std::endl;
+		exit(0);
+	}*/
+
+	Machine machine = Machine();
+	machine.Start();
 
 	return 0;
 }

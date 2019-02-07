@@ -1,6 +1,7 @@
 CC=g++
 SRCFILES=zippy.cc
 SRCFILES+=machine/machine.cc
+SRCFILES+=machine/rc2014.cc
 SRCFILES+=device/z80.cc
 SRCFILES+=device/device_rom.cc
 SRCFILES+=bus/bus.cc

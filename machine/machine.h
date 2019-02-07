@@ -14,11 +14,11 @@ protected:
 	Bus bus_;
 
 private:
-	void TaskThread();
+	virtual void TaskThread();
 
 public:
 	Machine();
-	void Start();
+	virtual void Start();
 };
 
 #endif	// ZIPPY_MACHINE_H_
