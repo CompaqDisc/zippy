@@ -13,8 +13,6 @@ public:
 	virtual void Interrupt() {};
 	virtual void NonMaskableInterrupt() {};
 	virtual void Refresh() {};
-	virtual uint8_t MemoryRead(uint16_t address) {return (uint8_t) 0;};
-	virtual void MemoryWrite(uint16_t address, uint8_t value) {};
 };
 
 #endif	// ZIPPY_DEVICE_H_

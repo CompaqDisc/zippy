@@ -70,23 +70,21 @@ DeviceROM::~DeviceROM() {
 	free(buffer_contents_);
 }
 
-uint8_t DeviceROM::MemoryRead(uint16_t address) {
-	// Subtract the start address from the given address
-	// so we get an index into the buffer.
-	uint16_t i = address - address_start_;
-
-	/*
-		Bail if the calculated index ends up out of bounds.
-		(IDK how that would end up occuring, but whatever.)
-
-		TODO: Remove check if unneeded.
-	*/
-	if (i > region_length_) {
-		std::cout
-			<< "[FATL] [device_rom.cc] Calculated index returned "
-			<< "out of bounds!" << std::endl;
-		exit(ERANGE);
+void DeviceROM::Clock() {
+	if (bus_->MemoryRequestActive()) {
+		if (bus_->ReadRequestActive()) {
+			if (bus_->Address() >= address_start_ &&
+				bus_->Address() < (address_start_ + region_length_))
+			{
+				printf("[INFO] [device_rom.cc] Request made @ 0x%04x\n",
+					bus_->Address());
+				bus_->PushData(
+					buffer_contents_[bus_->Address() - address_start_]);
+			}
+		}
 	}
+}
 
-	return buffer_contents_[i];
+void DeviceROM::BindToBus(Bus* bus) {
+	bus_ = bus;
 }
