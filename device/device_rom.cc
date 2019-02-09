@@ -76,7 +76,7 @@ void DeviceROM::Clock() {
 			if (bus_->Address() >= address_start_ &&
 				bus_->Address() < (address_start_ + region_length_))
 			{
-				printf("[INFO] [device_rom.cc] Request made @ 0x%04x\n",
+				printf("[INFO] [device_rom.cc] /RD request made for 0x%04x\n",
 					bus_->Address());
 				bus_->PushData(
 					buffer_contents_[bus_->Address() - address_start_]);

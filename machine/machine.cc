@@ -42,6 +42,9 @@ void Machine::TaskThread() {
 
 		if (accumulated_time >= 1.0f / target_speed_hz_) {
 			bus_.Clock();
+			if (bus_.HaltActive()) {
+				atomic_active_ = false;
+			}
 			accumulated_time = 0.0f;
 		}
 	}

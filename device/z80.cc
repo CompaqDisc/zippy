@@ -42,6 +42,7 @@ void Z80::Clock() {
 			*/
 
 			std::cout << "[INFO] [z80.cc] T1" << std::endl;
+			// TODO: Implement /RFSH reset
 			// /M1 goes active.
 			bus_->PushM1(true);
 			// The program counter is placed on the address bus.
@@ -83,8 +84,24 @@ void Z80::Clock() {
 
 			std::cout << "[INFO] [z80.cc] T3" << std::endl;
 			data_ = bus_->Data();
+			instruction_cache_ = data_;
+			DebugDisassemble();
 			bus_->PushReadRequest(false);
 			bus_->PushMemoryRequest(false);
+
+			// TODO: Clock States T3 and T4 of a fetch cycle are used to refresh
+			//       dynamic memories.
+
+			t_state_ = 4;
+			break;
+		case 4:
+			/*
+				T4 of opcode fetch (refresh cycle).
+			*/
+			// TODO
+			std::cout << "[INFO] [z80.cc] T4" << std::endl;
+
+			bus_->PushHalt(true);
 			break;
 		}
 	}
@@ -92,4 +109,9 @@ void Z80::Clock() {
 
 void Z80::BindToBus(Bus* bus) {
 	bus_ = bus;
+}
+
+void Z80::DebugDisassemble() {
+	std::cout << "[INFO] [z80.cc] Recieved instruction: "
+		<< instruction_labels_[instruction_cache_] << std::endl;
 }
