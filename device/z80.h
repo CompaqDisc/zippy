@@ -9,16 +9,16 @@
 
 // Z80 Flags
 #define FLAG_CARRY		1
-#define FLAG_SUBTRACT	2
+#define FLAG_SUBTRACT		2
 #define FLAG_PARITY		4
-#define FLAG_OVERFLOW	4
+#define FLAG_OVERFLOW		4
 #define FLAG_F3			8
-#define FLAG_HALF_CARRY	16
+#define FLAG_HALF_CARRY		16
 #define FLAG_F5			32
 #define FLAG_ZERO		64
 #define FLAG_SIGN		128
 
-#define NOP		0x00
+#define NOP	0x00
 #define HALT	0x76
 
 class Z80: public IDevice {
@@ -109,22 +109,33 @@ private:
 	};
 
 	// AF (accumulator and flags)
-	reg16 af_;
+	uint8_t a_;
+	uint8_t f_;
+	// Temporary accumulator (not shadowed)
+	uint8_t act_;
+	// Temporary value (used for register file moves, not shadowed)
+	uint8_t tmp_;
 	// BC
 	reg16 bc_;
 	// DE
 	reg16 de_;
 	// HL (indirect address)
 	reg16 hl_;
+	// WZ (16-bit cache)
+	reg16 wz_;
 
 	// AF' (accumulator and flags)
-	reg16 af_prime_;
+	uint8_t a_prime_;
+	uint8_t f_prime_;
+
 	// BC'
 	reg16 bc_prime_;
 	// DE'
 	reg16 de_prime_;
 	// HL' (indirect address)
 	reg16 hl_prime_;
+	// WZ' (16-bit cache)
+	reg16 wz_prime_;
 
 	// Index X
 	reg16 ix_;
@@ -162,6 +173,16 @@ private:
 	/*
 		Tables
 	*/
+	uint8_t* tab_r_[8] = {	// 8-bit registers
+		&bc_.h,
+		&bc_.l,
+		&de_.h,
+		&de_.l,
+		&hl_.h,
+		&hl_.l,
+		NULL,
+		&a_
+	};
 };
 
 #endif	// ZIPPY_DEVICE_Z80_H_

@@ -100,6 +100,7 @@ void Z80::Clock() {
 			std::cout << "[INFO] [z80.cc] T3" << std::endl;
 			data_ = bus_->Data();
 			instruction_register_ = data_;
+			tmp_ = data_;
 
 			x = instruction_register_ >> 6;
 			y = (instruction_register_ >> 3) & 0b111;
@@ -139,9 +140,12 @@ void Z80::Clock() {
 						machine_cycle_ = 1;
 					} else if (y == 1) {
 						// EX AF, AF'
-						reg16 temp = af_;
-						af_ = af_prime_;
-						af_prime_ = temp;
+						uint8_t temp = a_;
+						a_ = a_prime_;
+						a_prime_ = temp;
+						temp = f_;
+						f_ = f_prime_;
+						f_prime_ = temp;
 
 						// Instruction finished, set m_cycle to 1.
 						machine_cycle_ = 1;
