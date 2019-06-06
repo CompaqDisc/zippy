@@ -5,6 +5,21 @@
 #include "device.h"
 
 #include <stdint.h>
+#include <vector>
+
+// Z80 Flags
+#define FLAG_CARRY		1
+#define FLAG_SUBTRACT	2
+#define FLAG_PARITY		4
+#define FLAG_OVERFLOW	4
+#define FLAG_F3			8
+#define FLAG_HALF_CARRY	16
+#define FLAG_F5			32
+#define FLAG_ZERO		64
+#define FLAG_SIGN		128
+
+#define NOP		0x00
+#define HALT	0x76
 
 class Z80: public IDevice {
 public:
@@ -14,6 +29,8 @@ public:
 	Z80();
 private:
 	void DebugDisassemble();
+	void NotImplemented();
+	void UnexpectedState();
 	Bus* bus_;
 
 	const char* instruction_labels_[256] = {
@@ -22,9 +39,9 @@ private:
 	"EX AF, AF'  ", "ADD HL, BC  ", "LD A, (BC)  ", "DEC BC      ", // 0x08-0x0B
 	"INC C       ", "DEC C       ", "LD C, X     ", "RRCA        ", // 0x0C-0x0F
 	"DJNZ X      ", "LD DE, XX   ", "LD (DE), A  ", "INC DE      ", // 0x10-0x13
-	"            ", "            ", "            ", "            ", // 0x14-0x17
-	"            ", "            ", "            ", "            ", // 0x18-0x1B
-	"            ", "            ", "            ", "            ", // 0x1C-0x1F
+	"INC D       ", "DEC D       ", "LD D, X     ", "RLA         ", // 0x14-0x17
+	"JR X        ", "ADD HL, DE  ", "LD A, (DE)  ", "DEC DE      ", // 0x18-0x1B
+	"INC E       ", "DEC E       ", "LD E, X     ", "RRA         ", // 0x1C-0x1F
 	"            ", "            ", "            ", "            ", // 0x20-0x23
 	"            ", "            ", "            ", "            ", // 0x24-0x27
 	"            ", "            ", "            ", "            ", // 0x28-0x2B
@@ -67,20 +84,20 @@ private:
 	"            ", "            ", "            ", "            ", // 0xBC-0xBF
 	"            ", "            ", "            ", "            ", // 0xC0-0xC3
 	"            ", "            ", "            ", "            ", // 0xC4-0xC7
-	"            ", "            ", "            ", "CB PFX: BIT ", // 0xC8-0xCB
+	"            ", "            ", "            ", "CB PREFIX   ", // 0xC8-0xCB
 	"            ", "            ", "            ", "RST 08H     ", // 0xCC-0xCF
 	"            ", "            ", "            ", "            ", // 0xD0-0xD3
 	"            ", "            ", "            ", "            ", // 0xD4-0xD7
 	"            ", "            ", "            ", "            ", // 0xD8-0xDB
-	"            ", "ED PFX: EXTD", "SBC A, X    ", "RST 18H     ", // 0xDC-0xDF
+	"            ", "DD PREFIX   ", "SBC A, X    ", "RST 18H     ", // 0xDC-0xDF
 	"            ", "            ", "            ", "            ", // 0xE0-0xE3
 	"            ", "            ", "            ", "            ", // 0xE4-0xE7
 	"            ", "            ", "            ", "            ", // 0xE8-0xEB
-	"            ", "            ", "XOR X       ", "RST 28H     ", // 0xEC-0xEF
+	"            ", "ED PREFIX   ", "XOR X       ", "RST 28H     ", // 0xEC-0xEF
 	"            ", "            ", "            ", "            ", // 0xF0-0xF3
 	"            ", "            ", "            ", "            ", // 0xF4-0xF7
-	"            ", "            ", "            ", "            ", // 0xF8-0xFB
-	"            ", "            ", "CP X        ", "RST 38H     "};// 0xFC-0xFF
+	"RET M       ", "LD SP, HL   ", "JP M, XX    ", "EI          ", // 0xF8-0xFB
+	"CALL M, XX  ", "FD PREFIX   ", "CP X        ", "RST 38H     "};// 0xFC-0xFF
 
 	union reg16 {
 		uint16_t r;
@@ -99,7 +116,7 @@ private:
 	reg16 de_;
 	// HL (indirect address)
 	reg16 hl_;
-	
+
 	// AF' (accumulator and flags)
 	reg16 af_prime_;
 	// BC'
@@ -141,6 +158,10 @@ private:
 	uint8_t instruction_cache_;
 	// Operand Cache
 	uint8_t operand_cache_;
+
+	/*
+		Tables
+	*/
 };
 
 #endif	// ZIPPY_DEVICE_Z80_H_
