@@ -42,13 +42,13 @@ DeviceROM::DeviceROM(uint16_t address_start, size_t region_length,
 	if (file_length > region_length_) {
 		// Warn that we will truncate the read.
 		std::cout
-			<< "[WARN] [device_rom.cc] Specified file is too long for buffer!"
+			<< "[WARN] [device_rom.cc] Specified romfile is too long for virtual ROM!"
 			<< "Truncating read!" << std::endl;
-		
+
 		// Warn how large the file was.
 		printf(
 			"[WARN] [device_rom.cc] "
-			"Attempting to load %s (%li bytes), into region of %li bytes!\n",
+			"Attempting to load %s (%li bytes), into virtual ROM with size of %li bytes!\n",
 			file_path.c_str(), file_length, region_length_
 		);
 
@@ -57,7 +57,7 @@ DeviceROM::DeviceROM(uint16_t address_start, size_t region_length,
 	} else {
 		printf(
 			"[INFO] [device_rom.cc] "
-			"Loaded %s (%li bytes), into region of %li bytes\n",
+			"Loaded %s (%li bytes), into virtual ROM with size of %li bytes\n",
 			file_path.c_str(), file_length, region_length_
 		);
 	}
