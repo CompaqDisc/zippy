@@ -1,5 +1,6 @@
 	org 0000h
 main:
+	nop
 	; Inversion patterns, ensure byte order when exploring memory.
 	ld a,0xAA
 	ld bc,0x55AA
