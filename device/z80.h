@@ -154,8 +154,8 @@ private:
 	uint8_t t_state_;
 	// Buffered Data Bus
 	uint8_t data_;
-	// Instruction Cache
-	uint8_t instruction_cache_;
+	// Instruction Register
+	uint8_t instruction_register_;
 	// Operand Cache
 	uint8_t operand_cache_;
 

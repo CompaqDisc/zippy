@@ -24,9 +24,9 @@ void Z80::Reset() {
 void Z80::Clock() {
 	std::cout << "[INFO] [z80.cc] Clock" << std::endl;
 
-	uint8_t x = instruction_cache_ >> 6;
-	uint8_t y = (instruction_cache_ >> 3) & 0b111;
-	uint8_t z = instruction_cache_ & 0b111;
+	uint8_t x = instruction_register_ >> 6;
+	uint8_t y = (instruction_register_ >> 3) & 0b111;
+	uint8_t z = instruction_register_ & 0b111;
 
 	uint8_t p = y >> 1;
 	uint8_t q = y & 1;
@@ -99,11 +99,11 @@ void Z80::Clock() {
 
 			std::cout << "[INFO] [z80.cc] T3" << std::endl;
 			data_ = bus_->Data();
-			instruction_cache_ = data_;
+			instruction_register_ = data_;
 
-			x = instruction_cache_ >> 6;
-			y = (instruction_cache_ >> 3) & 0b111;
-			z = instruction_cache_ & 0b111;
+			x = instruction_register_ >> 6;
+			y = (instruction_register_ >> 3) & 0b111;
+			z = instruction_register_ & 0b111;
 
 			p = y >> 1;
 			q = y & 1;
@@ -223,7 +223,7 @@ void Z80::Clock() {
 				NotImplemented();
 			}
 
-			if (instruction_cache_ == HALT) {
+			if (instruction_register_ == HALT) {
 				// HALT
 				pc_ -= 1;
 				machine_cycle_ = 1;
@@ -242,7 +242,7 @@ void Z80::BindToBus(Bus* bus) {
 
 void Z80::DebugDisassemble() {
 	std::cout << "[INFO] [z80.cc] Recieved instruction: "
-		<< instruction_labels_[instruction_cache_] << std::endl;
+		<< instruction_labels_[instruction_register_] << std::endl;
 }
 
 void Z80::NotImplemented() {
